@@ -21,7 +21,7 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
                 
     const fetchUsers = async () =>{
         try {
-            const response = await fetch('http://localhost:3500/getusers', {credentials: 'same-origin', headers: {
+            const response = await fetch('https://10.0.18.142:3500/getusers', {credentials: 'same-origin', headers: {
                 'Authorization' : `Bearer ${accessToken}`,
                 'Access-Control-Allow-Credentials': true
             }});
@@ -93,7 +93,7 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
             credentials: 'same-origin'
         }
         try {
-            const response = await fetch('http://localhost:3500/chat', chatConfig);
+            const response = await fetch('https://10.0.18.142:3500/chat', chatConfig);
             const results = await response.json();
             console.log('results',results);
             setMessage('');
@@ -116,7 +116,7 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
             credentials: 'same-origin'
         }
         try {
-            const response = await fetch('http://localhost:3500/chat/getall', chatConfig);
+            const response = await fetch('https://10.0.18.142:3500/chat/getall', chatConfig);
             const data = await response.json();
             console.log(data);
             setUserChats(data);
@@ -126,7 +126,7 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
 
     const handleRefresh = async ()=> {
         try {
-            const response = await fetch('http://localhost:3500/refresh',{headers:{
+            const response = await fetch('https://10.0.18.142:3500/refresh',{headers:{
                 'Access-Control-Allow-Credentials':true
             }, credentials: 'include'});
             const data = await response.json();
@@ -139,7 +139,7 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
         
     }
     const handleLogout = async ()=>{
-        const response = await fetch('http://localhost:3500/logout');
+        const response = await fetch('https://10.0.18.142:3500/logout');
         console.log(response.status);
         setAccessToken('');
     }
