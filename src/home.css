@@ -1,0 +1,29 @@
+.navBtn {
+    width: 40px;
+    height: 40px;
+}
+
+.navBtn:hover {
+    scale: 1.2;
+}
+.dot{
+    list-style-type: disc;
+    width: fit-content;
+    font-size: 100px;
+    height: fit-content;
+}
+p {
+    color: aliceblue;
+    text-align: center;
+    width: 80%;
+}
+
+.dotList {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    list-style-type: disc !important;
+    background-color: transparent;
+    border: none;
+}

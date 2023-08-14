@@ -113,9 +113,12 @@ label:hover {
 }
 
 .title {
+  display: flex;
   width: 100%;
   text-align: center;
   font-size: 1.5rem;
+  align-items: center;
+  justify-content: center;
 }
 form {
   color: aliceblue;
@@ -138,14 +141,13 @@ button {
   border-radius: 5px;
   background-color: #0d60ae;
   color: aliceblue;
-  animation-name: buttonAnim;
-  animation-duration:0.75s;
-  animation-iteration-count: infinite;
+
 }
 
 button:hover {
   cursor: pointer;
-  
+  animation-name: buttonAnim;
+  animation-duration:0.75s;
 }
 @keyframes buttonAnim {
   100% {scale: 1.1;}
@@ -159,6 +161,7 @@ input {
   margin: 15px;
 }
 @media screen and (max-width: 700px) {
+ 
   .navbar {
     display: block;
     width: 100%;
@@ -172,11 +175,13 @@ input {
   #home {
     width: 100%;
     text-align: left;
-    padding-left: 100px;
+    padding-left: 80px;
 }
   #home:hover {
     scale: 1.01;
-    padding-left: 180px;
+    animation-name: navbarSlide;
+    animation-duration: 0.75s;
+    animation-fill-mode: forwards;
   }
   label {
     padding: 10px;
@@ -187,15 +192,22 @@ input {
   }
   .title:hover{
     scale: 1;
+    cursor:initial;
+  }
+  @keyframes navbarSlide {
+    100% {padding-left: 150px;}
   }
   .navbarItem {
     width: 100%;
     text-align: left;
-    padding-left: 100px;
+    padding-left: 80px;
   }
   .navbarItem:hover {
     scale: 1.01;
-    padding-left: 170px;
+    animation-name: navbarSlide;
+    animation-duration: 0.75s;
+    animation-fill-mode: forwards;
+
   }
   .dropdown {
     display: flex;
@@ -206,6 +218,7 @@ input {
     padding: 1px;
   }
   form {
+    margin-top: 30px;
     width: 70%;
   }
   input {
@@ -218,6 +231,33 @@ input {
 
   button {
     margin: 20px;
+    width: 30%;
+    border-radius: 5px;
+
+  }
+}
+
+@media screen and (min-width: 600px) {
+ 
+  .navbar{
+    margin-bottom: 0;
+  }
+  form {
+    padding: 0;
+    margin: 0;
+    width: 50%;
+    height: fit-content;
+  }
+  input {
+    font-size: inherit;
+    width: 90%;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    margin: 10px;
+  }
+
+  button {
+    margin: 10px;
     width: 30%;
     border-radius: 5px;
 

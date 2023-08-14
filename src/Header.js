@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { IoMdArrowDropdownCircle } from 'react-icons/io'
 import { useState, useEffect } from 'react'
-const Header = () => {
+const Header = ({accessToken, setAccessToken}) => {
 
     const [isActive, setIsActive] = useState(false);
     const [width, setWidth] = useState(window.innerWidth);
@@ -10,7 +10,9 @@ const Header = () => {
     useEffect(() => {
         width < 700 ? setIsActive(true) : setIsActive(false)
     }, [])
+    
     return (
+        accessToken.length < 1 &&
         <ul className="navbar">
             <li > 
                <Link id='home' className='navbarItem'  to = {'/'}>Home</Link>  <label style={{display: width > 700 ? 'none' : 'block'}} onClick={()=> setIsActive(!isActive)}><IoMdArrowDropdownCircle className='.drop'/></label> 
