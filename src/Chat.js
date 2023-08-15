@@ -166,7 +166,7 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
 
                 <h2> {wantsNewChat ? 'Contacts' : 'Chats'} </h2>
 
-                {!wantsNewChat && userChats.length > 0 &&
+                {!wantsNewChat && userChats.length > 0 && users.length > 0 &&
                 userChats.map(chat => 
                     <div className='chatItem' onClick={() => enteredChat(users.find(user => user.username === (chat.user1 !== currentUser ? chat.user1 : chat.user2) ))}>
                     <label style={{ width: '100%', textAlign: 'left', paddingBottom: '2px', paddingLeft: '20px' }}>{chat.user1 !== currentUser ? users.find(user => user.username === chat.user1).fullName 
