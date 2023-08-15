@@ -15,15 +15,15 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
     const [searchedResults, setSearchedResults] = useState([]);
     const [enteredChatWith, setHasEnteredChatWith] = useState();
     const [message, setMessage] = useState('');
-    const [userChats, setUserChats] = useState();
+    const [userChats, setUserChats] = useState([]);
     const [currentChat, setCurrentChat] = useState();
     const navigate = useNavigate();
                 
     const fetchUsers = async () =>{
         try {
-            const response = await fetch('https://10.0.18.142:3500/getusers', {credentials: 'same-origin', headers: {
+            const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/getusers', {credentials: 'same-origin', headers: {
                 'Authorization' : `Bearer ${accessToken}`,
-                'Access-Control-Allow-Credentials': true
+                'Access-Control-Allow-Origin': 'true'
             }});
             const data = await response.json();
             setUsers(data);
@@ -84,7 +84,7 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
                 'Accept' : 'application/json',
                 'Content-Type' : 'application/json',
                 'Authorization' : `Bearer ${accessToken}`,
-                'Access-Control-Allow-Credentials': 'true'
+                'Access-Control-Allow-': 'true'
             },
             body: JSON.stringify({sender: currentUser,
                 receiver: enteredChatWith.username,
@@ -93,7 +93,7 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
             credentials: 'same-origin'
         }
         try {
-            const response = await fetch('https://10.0.18.142:3500/chat', chatConfig);
+            const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/chat', chatConfig);
             const results = await response.json();
             console.log('results',results);
             setMessage('');
@@ -110,13 +110,13 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
                 'Accept' : 'application/json',
                 'Content-Type' : 'application/json',
                 'Authorization' : `Bearer ${accessToken}`,
-                'Access-Control-Allow-Credentials': true
+                'Access-Control-Allow-Origin': 'true'
             },
             body: JSON.stringify({sender: currentUser}),
             credentials: 'same-origin'
         }
         try {
-            const response = await fetch('https://10.0.18.142:3500/chat/getall', chatConfig);
+            const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/chat/getall', chatConfig);
             const data = await response.json();
             console.log(data);
             setUserChats(data);
@@ -126,8 +126,8 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
 
     const handleRefresh = async ()=> {
         try {
-            const response = await fetch('https://10.0.18.142:3500/refresh',{headers:{
-                'Access-Control-Allow-Credentials':true
+            const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/refresh',{headers:{
+                'Access-Control-Allow-Origin':'true'
             }, credentials: 'include'});
             const data = await response.json();
             console.log(data);
@@ -139,7 +139,7 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
         
     }
     const handleLogout = async ()=>{
-        const response = await fetch('https://10.0.18.142:3500/logout');
+        const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/logout');
         console.log(response.status);
         setAccessToken('');
     }
@@ -166,7 +166,7 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
 
                 <h2> {wantsNewChat ? 'Contacts' : 'Chats'} </h2>
 
-                {!wantsNewChat && userChats &&
+                {!wantsNewChat && userChats.length > 0 &&
                 userChats.map(chat => 
                     <div className='chatItem' onClick={() => enteredChat(users.find(user => user.username === (chat.user1 !== currentUser ? chat.user1 : chat.user2) ))}>
                     <label style={{ width: '100%', textAlign: 'left', paddingBottom: '2px', paddingLeft: '20px' }}>{chat.user1 !== currentUser ? users.find(user => user.username === chat.user1).fullName 

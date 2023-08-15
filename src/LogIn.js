@@ -15,12 +15,12 @@ const LogIn = ({accessToken, setAccessToken, setCurrentUser, setUser}) => {
                     headers: {
                         'Accept' : 'application/json',
                         'Content-Type' : 'application/json',
-                        'Access-Control-Allow-Credentials': 'true'
+                        'Access-Control-Allow-Origin': 'true'
                     },
                     body: JSON.stringify({username: username, pwd: pwd}),
                     credentials: 'include'
                 }
-                const response = await fetch('http://10.0.18.142:3500/login', config);
+                const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/login', config);
                 const data = await response.json();
                 if(data.accessToken) {
                     setAccessToken(data.accessToken);

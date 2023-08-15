@@ -28,7 +28,7 @@ const SignUp = () => {
                     body: JSON.stringify({username:username, pwd:pwd, fullName: fullName, phoneNumber:phoneNumber})
                 }
 
-                const response = await fetch('http://localhost:3500/signup', config);
+                const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/signup', config);
                 const data = await response.json();
                 if(data.message) {
                     setUsername('');
