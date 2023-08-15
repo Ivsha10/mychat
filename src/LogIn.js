@@ -21,6 +21,7 @@ const LogIn = ({accessToken, setAccessToken, setCurrentUser, setUser}) => {
                     credentials: 'include'
                 }
                 const response = await fetch('https://chatappserver-duricicsolutions.b4a.run:3500/login', config);
+                console.log(response);
                 const data = await response.json();
                 if(data.accessToken) {
                     setAccessToken(data.accessToken);
