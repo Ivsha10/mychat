@@ -11,6 +11,8 @@
     width: fit-content;
     font-size: 100px;
     height: fit-content;
+    border: 1px solid black;
+    border-radius: 50%
 }
 p {
     color: aliceblue;
