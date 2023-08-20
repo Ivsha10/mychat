@@ -183,12 +183,12 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
 
 
                 <div className='chatsList'>
-                    {wantsNewChat ? filteredContacts.map(contact =>
+                    {wantsNewChat ? filteredContacts.length > 0 && filteredContacts.map(contact =>
                         <div key={contact.username} style={{display:'flex',alignItems:'center'}}  className='chatItem' onClick={() => enteredChat(users.find(user => user.username === contact.username))}>
                             <img  className='contactImage' src={'./Visa.png'} />
                             <label className='nameLabel'>{contact.fullName}</label>
                         </div>) : 
-                        filteredChats.map(chat => 
+                        filteredChats.length > 0 && filteredChats.map(chat => 
                             <div key={chat.user1 === currentUser ? chat.user2 : chat.user1} className='chatItem' onClick={()=> enteredChat(users.find(user => user.username === (chat.user1 === currentUser ? chat.user2 : chat.user1)))}>
                                 <img  className='contactImage' src={'./Visa.png'} />
                                 <label className='nameLabel'>{users.find(user => user.username === (chat.user1 === currentUser ? chat.user2 : chat.user1)).fullName}</label>
