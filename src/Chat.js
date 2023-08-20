@@ -19,7 +19,6 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
     const [message, setMessage] = useState('');
     const [userChats, setUserChats] = useState([]);
     const [currentChat, setCurrentChat] = useState();
-
     const navigate = useNavigate();
 
     const fetchUsers = async () => {
@@ -173,7 +172,7 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
                     <ul className='activeList'>
                         {users.map(user => 
                             <li className='activeUser' style={{textAlign:'center'}}>
-                            <img  className='contactImage' src={'./Visa.png'} style={{margin:'5px'}} />
+                            <img  className='contactImage' src={''} style={{margin:'5px'}} />
                             <label className='nameLabel' style={{fontSize:'12px', textAlign:'center', padding:'0'}}>{user.fullName.split(' ')[0] }</label>
                             </li>
                             )}
