@@ -1,8 +1,9 @@
 import './chat.css'
-
 import { BiArrowBack } from 'react-icons/bi'
-import {BiLogOut} from 'react-icons/bi';
-import { RiChatNewLine } from 'react-icons/ri'
+import { IoCallOutline, IoAddOutline } from 'react-icons/io5';
+import { AiOutlinePicture } from 'react-icons/ai'
+import { BsFillChatDotsFill } from 'react-icons/bs'
+import { RiUserSmileLine } from 'react-icons/ri'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import ChatWindow from './ChatWindow'
@@ -12,81 +13,87 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
     const [wantsNewChat, setWantsNewChat] = useState(false);
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState('');
-    const [searchedResults, setSearchedResults] = useState([]);
-    const [enteredChatWith, setHasEnteredChatWith] = useState();
+    const [filteredChats, setFilteredChats] = useState([]);
+    const [filteredContacts, setFilteredContacts] = useState([]);
+    const [enteredChatWith, setHasEnteredChatWith] = useState([]);
     const [message, setMessage] = useState('');
     const [userChats, setUserChats] = useState([]);
     const [currentChat, setCurrentChat] = useState();
+
     const navigate = useNavigate();
-                
-    const fetchUsers = async () =>{
+
+    const fetchUsers = async () => {
         try {
-            const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/getusers', {credentials: 'same-origin', headers: {
-                'Authorization' : `Bearer ${accessToken}`,
-                'Access-Control-Allow-Origin': 'true'
-            }});
+            const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/getusers', {
+                credentials: 'same-origin', headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Access-Control-Allow-Origin': 'true'
+                }
+            });
             const data = await response.json();
-            setUsers(data);
-        
+            setUsers(data.sort((a,b) => a.fullName > b.fullName ? 1 : a.fullname < b.fullName ? - 1 : 0));
+
         } catch (err) {
         }
-        
+
     }
+
     useEffect(() => {
         if (accessToken.length < 1) {
             navigate('/', { replace: true })
             setCurrentUser('');
         } else {
-           if(user) fetchUsers();
+            if (user) fetchUsers();
         }
     }, [accessToken])
 
-    useEffect(()=> {
-       if(users) getAllChats();
-    },[users, accessToken])
+    useEffect(() => {
+        if (users.length > 0) {getAllChats();
+        users.filter(user => user.username !== currentUser);
+        setFilteredContacts(users.sort((a,b) => a.fullName.split(' ')[0] > b.fullName.split(' ')[0] ? 1 : a.fullName.split(' ')[0] < b.fullName.split(' ')[0] ? -1 : 0))};
+    }, [users, accessToken])
 
+    const handleFilteredChats = () => {
+        let filteredUsernames = users.filter(user => (user.username !== currentUser) &&
+            (user.fullName.toLowerCase().includes(search.toLowerCase()))).map(user => user.username);
+        setFilteredChats(userChats.filter(chat => filteredUsernames.includes(chat.user1) || filteredUsernames.includes(chat.user2)))
+    }
+    useEffect(() => {
 
-    useEffect(()=>{
-        if(search.length > 0)
-        setSearchedResults(users.filter(user => user.fullName.toLowerCase().includes(search.toLowerCase()) && user.username !== currentUser))
-        else {setSearchedResults([])};
-    },[search])
-    
-    useEffect(()=> {
-        if(!wantsNewChat) {
-            setSearch('');
-            setSearchedResults('');
-        };
-    })
+        if (search.length > 0) {
+           users.sort((a, b) => a.fullName > b.fullName ? 1 : a.fullName < b.fullName ? -1 : 0);
+           setFilteredContacts(users.filter(user => user.username !== currentUser && user.fullName.toLowerCase().includes(search.toLowerCase())));
+           handleFilteredChats();
+        } else if (search.length === 0) {
+            setFilteredContacts(users.filter(user => user.username !== currentUser));
+            setFilteredChats(userChats);
+        }
+        }, [search])
 
-   
-
-    useEffect(()=>{
+    useEffect(() => {
         getAllChats();
     }, [hasEntered])
-    
-    const enteredChat = (user)=> {
+
+    const enteredChat = (user) => {
         setHasEntered(true);
         setHasEnteredChatWith(user);
         const foundChat = userChats.find(chat => (chat.user1 === user.username) || chat.user2 === user.username);
         console.log(foundChat);
-        if(foundChat === undefined) setCurrentChat([]);
+        if (foundChat === undefined) setCurrentChat([]);
         else setCurrentChat(foundChat['chat'])
     }
 
-
-    
-    
-    const sendMessage = async ()=> {
+    const sendMessage = async () => {
         const chatConfig = {
-            method: 'POST', 
+            method: 'POST',
             headers: {
-                'Accept' : 'application/json',
-                'Content-Type' : 'application/json',
-                'Authorization' : `Bearer ${accessToken}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
                 'Access-Control-Allow-': 'true'
             },
-            body: JSON.stringify({sender: currentUser,
+            body: JSON.stringify({
+                sender: currentUser,
                 receiver: enteredChatWith.username,
                 message: message
             }),
@@ -95,7 +102,7 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
         try {
             const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/chat', chatConfig);
             const results = await response.json();
-            console.log('results',results);
+            console.log('results', results);
             setMessage('');
             getAllChats();
             setCurrentChat(results['chat'])
@@ -103,16 +110,17 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
         }
 
     }
-    const getAllChats = async ()=> {
+
+    const getAllChats = async () => {
         const chatConfig = {
-            method: 'POST', 
+            method: 'POST',
             headers: {
-                'Accept' : 'application/json',
-                'Content-Type' : 'application/json',
-                'Authorization' : `Bearer ${accessToken}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
                 'Access-Control-Allow-Origin': 'true'
             },
-            body: JSON.stringify({sender: currentUser}),
+            body: JSON.stringify({ sender: currentUser }),
             credentials: 'same-origin'
         }
         try {
@@ -120,79 +128,108 @@ const Chat = ({ accessToken, currentUser, setCurrentUser, user, setAccessToken }
             const data = await response.json();
             console.log(data);
             setUserChats(data);
+            setFilteredChats(data);
         } catch (err) {
+            console.log(err);
         }
     }
 
-    const handleRefresh = async ()=> {
+    const handleRefresh = async () => {
         try {
-            const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/refresh',{headers:{
-                'Access-Control-Allow-Origin':'true'
-            }, credentials: 'include'});
+            const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/refresh', {
+                headers: {
+                    'Access-Control-Allow-Origin': 'true'
+                }, credentials: 'include'
+            });
             const data = await response.json();
             console.log(data);
             setAccessToken(data['jwt']);
         } catch (err) {
             console.log(err.message);
         }
-        
-        
+
+
     }
-    const handleLogout = async ()=>{
+
+    const handleLogout = async () => {
         const response = await fetch('https://chatappserver-duricicsolutions.b4a.run/logout');
         console.log(response.status);
         setAccessToken('');
     }
-    
 
-   
     return (
         !hasEntered ?
             <main className='chatsContainer'> {/* Chats list window */}
-                <BiLogOut className='exitBtn' onClick={()=> handleLogout()}/>
                 <div className='controlsBar'>
-                    {wantsNewChat ? <BiArrowBack className='backBtn' onClick={() => setWantsNewChat(false)} /> :null}
+                    {wantsNewChat ? <BiArrowBack className='backBtn' onClick={() => setWantsNewChat(false)} /> : null}
                     <input
                         type='text'
                         className='searchInput'
                         placeholder='Search Chat'
                         value={search}
-                        onChange={(e)=> wantsNewChat ? setSearch(e.target.value) : null} //null will be changed later to setChats
+                        onChange={(e) => setSearch(e.target.value)} //null will be changed later to setChats
                     />
-                    {!wantsNewChat &&
-                        <RiChatNewLine className='newChatBtn' onClick={() => setWantsNewChat(true)} />
-                    }
+                    <h3 style={{width:'90%', padding:'3px', textAlign:'left', marginLeft:'20px'}}>Active</h3>
+                    <ul className='activeList'>
+                        {users.map(user => 
+                            <li className='activeUser' style={{textAlign:'center'}}>
+                            <img  className='contactImage' src={'./Visa.png'} style={{margin:'5px'}} />
+                            <label className='nameLabel' style={{fontSize:'12px', textAlign:'center', padding:'0'}}>{user.fullName.split(' ')[0] }</label>
+                            </li>
+                            )}
+                        
+                    </ul>
                 </div>
 
-                <h2> {wantsNewChat ? 'Contacts' : 'Chats'} </h2>
 
-                {!wantsNewChat && userChats.length > 0 && users.length > 0 &&
-                userChats.map(chat => 
-                    <div className='chatItem' onClick={() => enteredChat(users.find(user => user.username === (chat.user1 !== currentUser ? chat.user1 : chat.user2) ))}>
-                    <label style={{ width: '100%', textAlign: 'left', paddingBottom: '2px', paddingLeft: '20px' }}>{chat.user1 !== currentUser ? users.find(user => user.username === chat.user1).fullName 
-                    : users.find(user => user.username === chat.user2).fullName}</label>
-                    <label style={{ width: 'max-content', textAlign: 'left', paddingLeft: '40px', paddingTop: '0px' }}>{chat.chat[chat.chat.length - 1].content}</label>
+                <div className='chatsList'>
+                    {wantsNewChat ? filteredContacts.map(contact =>
+                        <div key={contact.username} style={{display:'flex',alignItems:'center'}}  className='chatItem' onClick={() => enteredChat(users.find(user => user.username === contact.username))}>
+                            <img  className='contactImage' src={'./Visa.png'} />
+                            <label className='nameLabel'>{contact.fullName}</label>
+                        </div>) : 
+                        filteredChats.map(chat => 
+                            <div key={chat.user1 === currentUser ? chat.user2 : chat.user1} className='chatItem' onClick={()=> enteredChat(users.find(user => user.username === (chat.user1 === currentUser ? chat.user2 : chat.user1)))}>
+                                <img  className='contactImage' src={'./Visa.png'} />
+                                <label className='nameLabel'>{users.find(user => user.username === (chat.user1 === currentUser ? chat.user2 : chat.user1)).fullName}</label>
+                                <label className='messageLabel'>{chat.chat[chat.chat.length-1].content}</label>
+                                </div>
+                            )
+                        }
                 </div>
-                    )}
 
-                {wantsNewChat &&
-                    <div>
-                        {searchedResults.length > 0 && searchedResults.map(result => 
-                            <div key={result.username} className='chatItem' onClick={() => {enteredChat(result); console.log(result)}}>
-                            <label style={{ width: '50%', textAlign: 'left', paddingBottom: '2px', paddingLeft: '20px' }}>{result.fullName}</label>
-                        </div> )}
-                    </div>}
-            </main> : 
-            <ChatWindow setHasEntered={setHasEntered} 
-                        enteredChatWith={enteredChatWith}
-                        currentChat={currentChat}
-                        message={message}
-                        setMessage={setMessage}
-                        sendMessage={sendMessage}
-                        currentUser={currentUser}
-                        setWantsNewChat={setWantsNewChat}
-                        setUserChats= {setUserChats}/>
-            
+
+                <div className='buttonsBar'>
+                    <div className='btnContainer'>
+                        <BsFillChatDotsFill className='chatsBtn' />
+                        <label className='buttonLabel'>Chat</label>
+                    </div>
+                    <div className='btnContainer'>
+                        <IoCallOutline className='callBtn' />
+                        <label className='buttonLabel'>Call</label>
+                    </div>
+                    <IoAddOutline className='newChatBtn' onClick={() => setWantsNewChat(true)} />
+                    <div className='btnContainer'>
+                        <AiOutlinePicture className='galleryBtn' />
+                        <label className='buttonLabel'>Gallery</label>
+                    </div>
+                    <div className='btnContainer'>
+                        <RiUserSmileLine className='profileBtn' />
+                        <label className='buttonLabel'>Profile</label>
+                    </div>
+                </div>
+
+            </main> :
+            <ChatWindow setHasEntered={setHasEntered}
+                enteredChatWith={enteredChatWith}
+                currentChat={currentChat}
+                message={message}
+                setMessage={setMessage}
+                sendMessage={sendMessage}
+                currentUser={currentUser}
+                setWantsNewChat={setWantsNewChat}
+                setUserChats={setUserChats} />
+
     )
 }
 

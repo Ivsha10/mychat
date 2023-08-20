@@ -1,18 +1,19 @@
-main {
-    display: block;
-    color: aliceblue;
+label {
+    cursor: inherit !important;
+}
+.chatsContainer {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 25% 60% 15%;
     width: 100%;
-    min-height: 80vh;
-    margin: 10px;
-    border-radius: 5px;
+    min-height: 100vh;
+    max-height: 100vh;
     text-align: center;
-    border:2px solid #127bde;
-    max-height: 85vh;
+    background-color: #0A171F;
+    color: #EFF0F2 !important;
+    overflow: hidden;
 }
 
-.chatsContainer {
-    overflow-y: auto;
-}
 ul {
     width: 100%;
     margin: 0px 0px 0px 0px !important;
@@ -21,58 +22,183 @@ ul {
     justify-content: flex-start;
     align-items: center;
 }
+
 .controlsBar {
-    display: flex;
-    width: 100%;
-    max-height: 10%;
-    align-items: center;
-    justify-content: space-between;
-}
-.searchInput {
-    width: 70%;
-}
-.newChatBtn {
-    margin-right: 10px;
-    width: 10%;
-    height: 15%;
-    padding: 5px;
-}
-.newChatBtn:hover{
-    scale: 1.2;
-}
-h2{
-    text-align: left;
-    padding: 10px;
-    border-bottom: 1px solid #9a9a9a7e;
-}
-.chatItem {
     display: block;
+    grid-row: 1;
     width: 100%;
-    border-top: 1px solid #9a9a9a7e;
-    border-bottom: 1px solid #9a9a9a7e;
+    align-items: center;
+    justify-content: center;
+    max-height: 30%;
+}
+
+.searchInput {
+    width: 90%;
+    padding: 3%;
+    border-radius: 5px;
+    margin: 20px;
+    border: none;
+    background-color: #202D35;
+    color: #EFF0F2;
+    outline: none;
+}
+
+.searchInput::placeholder {
+    color: #9a9a9a7e;
+    width: 90%;
+    display: flex;
+}
+.activeList {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    background-color: transparent;
+    border: none;
+    margin: 0;
+    padding: 0;
+    
+}
+
+.activeUser{
+    display: block;
+    margin: 0;
+    width: fit-content;
     height: fit-content;
 }
-.chatItem:hover {
-    background-color: #9a9a9a7e;
+
+.chatsList {
+    display: block;
+    grid-row: 2;
+    overflow-y: auto;
 }
+
+
+.chatItem {
+    display: grid;
+    grid-template-columns: 15% 85%;
+    grid-template-rows: 50% 50%;
+    width: 100%;
+    height: fit-content;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.chatItem:hover {
+    background-color: #202D35;
+}
+
+.contactImage {
+    width: 48px;
+    height: 48px;
+    justify-content: center;
+    align-items: center;
+    margin: 2px;
+    margin-left: 10px;
+    border-radius: 50%;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    margin: 10px;
+}
+
+.nameLabel {
+    width: 100%;
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: 600;
+    grid-column: 2;
+    grid-row: 1;
+    padding: 0px;
+    padding-left: 10px;
+}
+
+.messageLabel {
+    display: flex;
+    width: 100%;
+    text-align: left;
+    font-weight: 300;
+    font-size: 0.8rem;
+    margin-top: -15px;
+    padding: 0;
+    padding-left: 20px;
+    flex-wrap: wrap;
+}
+
+.buttonsBar {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 20% 20% 20% 20% 20% ;
+    grid-template-rows: 50% 50%;
+    background-color: #060E11;
+    justify-items: center;
+    align-items: center;    
+}
+.btnContainer {
+    width: 100%;
+    height: 100%;
+    color: #9a9a9a7e;
+    grid-row: 1 / span 2;
+    cursor: pointer;
+}
+.chatsBtn, .callBtn, .newChatBtn, .galleryBtn, .profileBtn {
+    padding: 3px;
+    width: 50%;
+    height: 80%;
+    color: inherit;
+    align-self: center;
+}
+.btnContainer:hover {
+    color: #0071d9;
+}
+.newChatBtn {
+    width: 100%;
+    height: 80%;
+    justify-items: center;
+    padding: 0;
+    margin: 0;
+    grid-row: 1 / span 2;
+    grid-column: 3;
+    background-color: #0071d9;
+    color: #EFF0F2;
+    border: 10px solid #060E11;
+    border-radius: 30%;
+    margin-top: -50px;
+    cursor: pointer;
+}
+.newChatBtn:hover{
+    background-color: #202D35;
+}
+.buttonLabel {
+    width: 100%;
+    text-align: center;
+    font-size: 0.75rem;
+    color: inherit;
+    margin-top: -20px;
+}
+
 .chatContainer {
     height: 89%;
-    max-height: 89% ;
+    max-height: 89%;
     border-radius: 0;
+    
 }
+
 .backBtn {
     width: 30px;
     height: 30px;
 }
-.backBtn:hover{
+
+.backBtn:hover {
     scale: 1.1;
 }
+
 .friendName {
     width: 50%;
     text-align: left;
     height: 8%;
 }
-.friendName:hover{
+
+.friendName:hover {
     scale: 1;
     cursor: initial;
 }
@@ -80,7 +206,7 @@ h2{
 .chatArea {
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows:min-content;
+    grid-template-rows: min-content;
     width: 100%;
     height: fit-content;
     max-height: 95%;
@@ -90,7 +216,9 @@ h2{
     flex-direction: column-reverse;
 
 }
-.friendMessage, .userMessage {
+
+.friendMessage,
+.userMessage {
     white-space: pre-wrap;
     margin: 5px;
     margin-bottom: 0;
@@ -100,42 +228,50 @@ h2{
     text-align: left;
     padding: 5px;
     border-radius: 18px;
-    
+
 }
+
 .userMessage {
     background-color: #1d2125;
     position: relative;
     left: calc(60% - 10px);
 }
+
 .chatArea {
     background-color: #127bde;
     position: relative;
     bottom: 0;
     min-height: 93%;
 }
+
 #anchor {
     overflow-anchor: auto;
     height: 1px;
-  }
-.chatInputText {
-margin: 0;
-width: 100%;
-border-top: 2px solid #127bde;
-height: calc(7% + 6px);
 }
-label:hover{
+
+.chatInputText {
+    margin: 0;
+    width: 100%;
+    border-top: 2px solid #127bde;
+    height: calc(7% + 6px);
+}
+
+label:hover {
     scale: 1;
     cursor: initial;
 
 }
-input::placeholder{
+
+input::placeholder {
     font-size: 15px;
 }
+
 .chatInputBar {
     display: flex;
     justify-content: space-between;
     margin-left: 5px;
 }
+
 .messageInput {
     font: inherit;
     margin: 0;
@@ -147,22 +283,24 @@ input::placeholder{
     border: 1px solid;
 
 }
+
 .messageInput:focus {
     outline: none;
     border: 1px solid #127bde;
 }
 
-.btnSend{
+.btnSend {
     margin: 0;
     width: 10%;
     height: 80%;
     padding: 5px;
     color: aliceblue;
 }
+
 .btnSend:hover {
     color: #127bde;
     scale: 1.3;
-    
+
 }
 
 .exitBtn {
@@ -170,19 +308,22 @@ input::placeholder{
     width: 60px;
     height: 40px;
 }
+
 .exitBtn:hover {
     scale: 1.1;
     color: #127bde;
 }
+
 @media screen and (width < 500px) {
     main {
-        width: 80%;
-    }
-}
-@media screen and (width > 500px) {
-    main {
-        width:60%;
-        max-width: 400px;
+        width: 100%;
     }
 }
 
+
+
+@media screen and (width > 500px) {
+    main {
+        max-width: 500px;
+    }
+}

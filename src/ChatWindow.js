@@ -14,7 +14,7 @@ const ChatWindow = ({ setHasEntered, enteredChatWith, currentChat, message, setM
 
 
     return (
-        <main> {/* Chat window */}
+        <main className='chatsContainer'> {/* Chat window */}
             <div className='chatContainer' >
                 <ul>
                     <BiArrowBack className='backBtn' onClick={() => { setHasEntered(false); setWantsNewChat(false) }} />
